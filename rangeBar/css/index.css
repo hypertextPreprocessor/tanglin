@@ -1,0 +1,27 @@
+@charset "utf-8";
+html,body{width:100%;}
+*{padding:0;margin:0;}
+.conBar{width:95%;margin:0 auto;position:relative;border:1px solid #dedede;border-radius:6px;}
+.conBar>h5{border-bottom:1px solid #dedede;padding:1% 3%;}
+.conBar>div{width:100%;position:relative;margin:0 auto;height:68px;}
+.conBar>div>div{width:90%;height:100%;margin:0 auto;position:relative;}
+.items>hr,.items>div,.items>p{position:absolute;}
+.items>hr{border:3px solid #dedede;border-radius:5px;width:97%;top:56%;left:1%;z-index:1;}
+.items>div{}
+.items>div>img{width:20px;position:absolute;top:22px;z-index:5;}
+.items>div>span{position:absolute;font-size:14px;font-weight:bold;padding: 0% 3%;background: yellow; border: 1px solid #cccccc;left:-7px;width:32px;text-align:center;top:6px;color: #dedede;border-radius: 5px;z-index:4;}
+.items>p{width:100%;bottom:0;}
+.items>p>span:nth-child(1){}
+.items>p>span:nth-child(2){float:right;}
+/*
+.conBar div img,.conBar div hr,.conBar div span{position:absolute;}
+
+
+.conBar div hr{border:3px solid #dedede;border-radius:5px;width:97%;top:71%;left:1%;}
+.conBar div img{width:25px;top: 40%;left: 0;z-index: 2;}
+.conBar div span{font-size:14px;font-weight:bold;padding: 0% 3%;background: yellow; border: 1px solid #cccccc;left: -3%;width:25px;text-align:center;top: 15%;color: #dedede;border-radius: 5px;z-index: 0;}
+.conBar>p{width:100%;position:absolute;bottom:0;}
+.conBar>p>span{color:#cccccc;font-size:14px;}
+.conBar>p>span:nth-child(1){left:0;}
+.conBar>p>span:nth-child(2){right:0;}
+*/
