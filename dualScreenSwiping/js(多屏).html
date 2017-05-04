@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<title>JS风暴</title>
+</head>
+<style>
+	body{overflow:hidden;}
+	#btn{display:block;margin:0 auto;}
+	#content{width:300px;height:500px;overflow:hidden;}
+	#content .conter{width:900px;height:100%;overflow:hidden;font-size:0;}
+	.addAni{transition:all .3s ease-in-out;}
+	.conter>div{width:300px;height:100%;display:inline-block;font:bold 25px/150px "Arial";text-align:center;}
+	.conter div:nth-child(1){background:red;}
+	.conter div:nth-child(2){background:blue;}
+	.conter div:nth-child(3){background:green;}
+</style>
+<body>
+	<button id="btn">这是一个按钮</button>
+	<div id="content">
+		<div class="conter">
+			<div>第一屏展现</div>
+			<div>第二屏展现</div>
+			<div>第三屏展现</div>
+		</div>
+	</div>
+	<script>
+	//CSS3前缀兼容;
+	function prefix(){
+		var arr = ['','webkit','Moz','o','ms','khtml'];
+		var i = 0;
+		while(i<arr.length){
+			/*
+			if(typeof document.body.style.transition==='string'){
+				return arr[0];
+			}else */if(typeof document.body.style[arr[i]+'Transition'] === 'string'){
+				return arr[i];
+			}
+			i++;
+		}
+	};
+	/*
+	var aha = new ah();
+	aha.init({
+		
+	});
+	function ah(){
+		this.init = function(){console.log(this)};
+	}
+	*/
+	var touchCtl = {
+		init:function(options){
+			//console.log(Object.getOwnPropertyNames(this));
+			//console.log(options.id);
+			var doc = document.getElementById(options.id);
+			var doc_child = doc.children[0];
+			var flag = Boolean(false);
+			var h_pixel1;//接触点横坐标;
+			var h_pixel;//滑动点横坐标;
+			var gains = 0;//滑动距离(手指未离开时);
+			var lr = 0;//左右滑动判断;
+			var page = 0; 	//options.page;//页面的总数(从0开始计算);
+			doc_child.addEventListener('touchstart',startEven,false);
+			doc_child.addEventListener('touchmove',moveEven,false);
+			doc_child.addEventListener('touchend',endEven,false);
+			function startEven(e){
+				var e = event || window.event;
+				doc_child.className = options.className;
+				h_pixel1 = e.targetTouches[0].clientX;
+				//console.log(h_pixel1);
+				flag = Boolean(false);
+				console.log(gains);
+			};
+			function moveEven(e){
+				var e = event || window.event;
+				e.preventDefault();
+				var prevValue = h_pixel?h_pixel:h_pixel1;//获取前一帧的值;
+				h_pixel = e.changedTouches[0].clientX;
+				//doc_child.style[prefix()+'Transform'] = 'translate('+parseInt(h_pixel-h_pixel1)+'px)';
+				
+				if(prevValue<h_pixel){
+					lr = 1;
+					if(gains==0){flag = Boolean(false);}else{
+						//gains++;
+						gains+=3;
+						flag = Boolean(true);
+						doc_child.style[prefix()+'Transform'] = 'translate('+parseInt(gains)+'px)';
+					}
+					//console.log('右边');
+				}else{
+					lr = 2;
+					if(gains==-parseInt(options.contentWidth*options.page)){flag = Boolean(false);}else{
+						//gains--;
+						gains-=3;
+						flag = Boolean(true);
+						doc_child.style[prefix()+'Transform'] = 'translate('+parseInt(gains)+'px)';
+					}	
+					//console.log('左边');					
+				};
+			};
+			function endEven(e){
+				var e = event || window.event;
+				doc_child.className = ""+options.className+" addAni";
+				if(flag){
+					if(lr==2){		//向左边滑动;
+						//Math.abs(h_pixel1-h_pixel)
+						if(Math.abs(h_pixel1-h_pixel)>=options.distance){
+							page++;
+							doc_child.style[prefix()+'Transform'] = 'translate('+parseInt(-options.contentWidth*page)+'px)';
+							gains = -parseInt(options.contentWidth*page);
+							//console.log(Math.abs(h_pixel1-h_pixel));
+						}else{
+							//回滚
+							doc_child.style[prefix()+'Transform'] = 'translate('+parseInt(-options.contentWidth*page)+'px)';
+							gains = -parseInt(options.contentWidth*page);
+						}
+						//gains = -parseInt(options.contentWidth);
+					};
+					if(lr==1){//向右边滑动;
+						if(Math.abs(h_pixel1-h_pixel)>=options.distance){
+							page--;
+							doc_child.style[prefix()+'Transform'] = 'translate('+parseInt(-options.contentWidth*page)+'px)';
+							gains = -parseInt(options.contentWidth*page);
+						}else{
+							//回滚
+							doc_child.style[prefix()+'Transform'] = 'translate('+parseInt(-options.contentWidth*page)+'px)';
+							gains = -parseInt(options.contentWidth*page);
+						}
+						//gains = 0;
+					};	
+				flag = Boolean(false);
+				}else{
+					
+				};
+	
+			};
+		}
+	}
+	touchCtl.init({
+		id:'content',	//主要容器;
+		distance:100,	//滑动距离;
+		className:"conter",	//父容器class名称;
+		page:2,				//滑动的屏幕数量(从0开始计算);
+		contentWidth:document.getElementById('content').clientWidth	//容器的宽度;
+	});
+	</script>
+</body>
+</html>
