@@ -7,6 +7,7 @@
 <link type="text/css" href="css/index.css" rel="stylesheet"/>
 </head>
 <body>
+<!-----------------------------------------------------------------实际呈现格式------------------------------------------------------------------------------------------>
 	<div class="conBar">
 		<h5>退休年龄/预期寿命（岁）</h5>
 		<div>
@@ -31,20 +32,40 @@
 			</div>
 		</div>
 	</div>
-	<!--trial-->
+	<!----------------------------------------------------------------------------------------------------------------------------------------------------------->
+	<!--html格式-->
 	<div class="conBar cBc">
 		<h5>退休年龄/预期寿命（岁）</h5>
 	</div>
+	<!--html格式-->
 <script>
+//样式表模板conBar必须要有，根据据自己需要修改，样式名称cBc为插件获取DOM结构所需;
 function conBar(options){
+	function extend(o, p) {
+		for(prop in p) { 
+			o[prop] = p[prop]; 
+		}
+		return o;
+	}
+	function merge(o, p) {
+		for(prop in p) { 
+			if (o.hasOwnProperty(prop)) continue; 
+			o[prop] = p[prop];
+		}
+		return o;
+	}
+	
 	var opts = {
 		boxClass:".cBc",
-		items:[["#1afbb6",10,"images/ys-hbxjt.png"],["#000000",50,"images/ys-hbxjt.png"],["#ff0000",85,"images/ys-hbxjt.png"]],//控件个数[颜色，默认数值，控件图库位置];
+		items:[["#1afbb6",0,"images/ys-hbxjt.png"],["#000000",50,"images/ys-hbxjt.png"],["#ff0000",85,"images/ys-hbxjt.png"]],//控件个数[颜色，默认数值，控件图库位置];
 		valueFrom:0,	//起点；
 		valueTo:100,	//终点;
 		swipeAble:true	//是否可以拉动;
 	}
-	var con = document.querySelector(opts.boxClass);
+	options==null||undefined?opts:merge(options,opts);
+	
+	//console.log(options);
+	var con = document.querySelector(options.boxClass);
 	var o = document.createElement("div");
 	con.appendChild(o);
 	o.appendChild(o.cloneNode(true));
@@ -52,19 +73,21 @@ function conBar(options){
 	var itemBox = o.querySelector(".items");
 	var j=0;
 	var sv = new Array();
-	for(var i=0;i<opts.items.length;i++){	
+	for(var i=0;i<options.items.length;i++){	
 		j++;
 		var item = o.cloneNode();
 		var img = new Image();
 		var span = document.createElement("span");
 		//for(var j=0;j<2;i++){p.appendChild(span)};
-		img.src=opts.items[i][2];
+		img.src=options.items[i][2];
 		itemBox.appendChild(item);
 		item.appendChild(img);
 		item.appendChild(span);
-		item.childNodes[1].textContent=opts.items[i][1];
-		item.style.left=opts.items[i][1]+'%';
-		sv.push(opts.items[i][1]);
+		item.childNodes[1].textContent=options.items[i][1];
+		//Math.ceil(((options.items[i][1]-options.valueFrom)/(options.valueTo-options.valueFrom)).toFixed(2)*100);
+		item.style.left=Math.ceil(((options.items[i][1]-options.valueFrom)/(options.valueTo-options.valueFrom)).toFixed(2)*100)+'%';
+		//options.items[i][1]+'%';
+		sv.push(options.items[i][1]);
 		//console.log(item.childNodes[1]);
 	}
 	var p = document.createElement("p");
@@ -73,20 +96,21 @@ function conBar(options){
 	p.appendChild(SPAN.cloneNode());
 	var leftValue = p.querySelectorAll('span')[0];
 	var rightValue = p.querySelectorAll('span')[1];
-	leftValue.textContent = opts.valueFrom;
-	rightValue.textContent = opts.valueTo;
+	leftValue.textContent = options.valueFrom;
+	rightValue.textContent = options.valueTo;
 	itemBox.appendChild(p);
 	for(var s=0;s<j+1;s++){
 		var hr = document.createElement("hr");
 		itemBox.appendChild(hr);
 	}
 	var x = itemBox.querySelectorAll("hr");
-	var el = opts.items.length+1;
+	var el = options.items.length+1;
 	
-	for(var s=0;s<opts.items.length;s++){
-		x[s].style.borderColor = opts.items[s][0];
+	for(var s=0;s<options.items.length;s++){
+		x[s].style.borderColor = options.items[s][0];
 		x[s].style.zIndex = el;
-		x[s].style.width = opts.items[s][1]+'%';
+		x[s].style.width = Math.ceil(((options.items[s][1]-options.valueFrom)/(options.valueTo-options.valueFrom)).toFixed(2)*100)+'%'
+		//options.items[s][1]+'%';
 		el--;
 	}
 	
@@ -104,7 +128,10 @@ function conBar(options){
 	this.flag = flag;
 	this.startX=startX;
 	this.sv = sv;
-	if(opts.swipeAble){this.startEven(this)}else{console.log(opts.swipeAble+'不可拉动');};
+	this.max = options.valueTo;
+	this.min = options.valueFrom;
+	var data = this.startEven();
+	if(options.swipeAble){this.startEven(this)}else{console.log(options.swipeAble+'不可拉动');};
 }
 
 conBar.prototype.startEven = function(p){	
@@ -119,6 +146,8 @@ conBar.prototype.startEven = function(p){
 	var z = this.startX;
 	var b = this.cw-(this.cw-(this.hrw-10))/2;
 	var q = this.sv;
+	var q_max = this.max;
+	var q_min = this.min;
 	function startEven(p){
 		var e = event||window.event;
 		e.preventDefault;
@@ -144,20 +173,36 @@ conBar.prototype.startEven = function(p){
 		z=z-(c-h)/2
 		var t = Math.ceil(((z/h)*100).toFixed(2));
 		var la = cur.parentNode.parentNode.getElementsByTagName("hr");
-		var le = q.length; 
+		var le = q.length;
+		
+		/*
+		var es = cur.parentNode.parentNode.querySelectorAll("div");
+		console.log(es.length);
+		var qq=[];
+		for(var u=0;u<es.length;u++){
+			var tts = es[u].querySelector('span').textContent;
+			qq.push(tts);
+		}
+		*/
+		
 		if(m && z>=0 && z<=h){
 			var d = cur.parentNode.index;
-			q[d]=t;
-			if(q[d]<q[d-1]||q[d]>q[d+1])
-			{
+			q[d]=t;	//实时值;
+			if(q[d]<q[d-1]){
 				q[d]=q[d-1];
+			}else if(q[d]>q[d+1]){
+				q[d]=q[d+1];
 			}else{
-				cur.nextSibling.textContent = t;
+				cur.nextSibling.textContent = Math.ceil(((q_max-q_min)*(t/100)+q_min).toFixed(2));
 				cur.parentNode.style.left=z+'px';
 				for(var uk=0;uk<la.length;uk++){
 					//la[uk].style.borderColor = ;
 					la[uk].style.zIndex = le;
-					la[uk].style.width = q[uk]+'%';
+					la[uk].style.width =  q[uk]+'%';
+							//Math.ceil(((q[uk]-q_min)/(q_max-q_min)).toFixed(2)*100)+'%';
+							//console.log(q[d]+":"+q);
+							//Math.ceil(((options.items[s][1]-options.valueFrom)/(options.valueTo-options.valueFrom)).toFixed(2)*100)+'%'
+							//q[uk]+'%';
 					le--;
 				};		
 			}
@@ -165,29 +210,18 @@ conBar.prototype.startEven = function(p){
 			
 	}
 }
-conBar.prototype.moveEven = function(e,self){
-/*
-	//var con = document.querySelector(opts.boxClass);
-	//var itemBox = o.querySelector(".items");
-	//var hr = itemBox.querySelector("hr");
-	//var self = this;
-	var curr = this;
-	e = event||window.event;
-	e.preventDefault();
-	if(curr.flag){
-		curr.startX=e.changedTouches[0].clientX;
-		var l = curr.cw-curr.hcurr0;
-		var  r = curr.cw-(curr.cw-curr.hrw+10);
-		if(curr.startX>=l && curr.startX<=r){
-		self.parentNode.style.left=startX+"px";
-			console.log(startX);
-		}else{
-			console.log(curr)
-		}
-	}
-*/
-} 
-var cc = new conBar(); 
+</script>
+
+
+<script>
+//调用方法;
+var cc = new conBar({
+		boxClass:".cBc", //ID 跟 Class名称均可;
+		items:[["#1afbb6",65,"images/ys-hbxjt.png"],["#000000",70,"images/ys-hbxjt.png"],["#ff0000",99,"images/ys-hbxjt.png"]],//控件个数[颜色，默认数值，控件图库位置];
+		valueFrom:40,	//起点；
+		valueTo:130,	//终点;
+		swipeAble:true	//是否可以拉动;
+});
 </script>
 </body> 
 </html>
