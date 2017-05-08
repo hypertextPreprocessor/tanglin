@@ -130,7 +130,6 @@ function conBar(options){
 	this.sv = sv;
 	this.max = options.valueTo;
 	this.min = options.valueFrom;
-	//var data = this.startEven();
 	if(options.swipeAble){this.startEven(this)}else{console.log(options.swipeAble+'不可拉动');};
 }
 
@@ -139,7 +138,6 @@ conBar.prototype.startEven = function(p){
 		this.l[n].index = n;
 		this.l[n].childNodes[0].addEventListener("touchstart",startEven,false);
 		this.l[n].childNodes[0].addEventListener("touchmove",moveEven,false);
-		this.l[n].childNodes[0].addEventListener("touchend",endEven,false);
 	}
 	var m = this.flag;
 	var c = this.cw;
@@ -149,24 +147,22 @@ conBar.prototype.startEven = function(p){
 	var q = this.sv;
 	var q_max = this.max;
 	var q_min = this.min;
-	var Rn = [];//存放数值;
-	var le = q.length;//控件个数(长度);
-	for(var ii=0;ii<le;ii++){
-		Rn.push(this.con.querySelector(".items").querySelectorAll("div")[ii].querySelector("span").textContent);
-	};
-	function startEven(e){
+	function startEven(p){
 		var e = event||window.event;
 		e.preventDefault;
 		var cur = this;
 		m = true;	
 		z=e.changedTouches[0].clientX;
-		z=z-(c-h)/2
 		var ss = cur.parentNode.parentNode;
 		var mm = ss.getElementsByTagName("div");
 		for(var i =0;i<mm.length;i++){
 			mm[i].style.zIndex = 2*mm.length-1;
 		};
-		cur.parentNode.style.zIndex=n*2;	
+		cur.parentNode.style.zIndex=n*2;
+		//z=z-(c-h)/2
+		//cur.parentNode.style.left=z+'px';
+		//console.log(cur.parentNode.index);
+		return [m,z];
 	}
 	function moveEven(p){
 		var e = event||window.event;
@@ -176,58 +172,20 @@ conBar.prototype.startEven = function(p){
 		z=z-(c-h)/2
 		var t = Math.ceil(((z/h)*100).toFixed(2));
 		var la = cur.parentNode.parentNode.getElementsByTagName("hr");
+		var le = q.length;
 		
-		/***********************新算法*************************************/
-		if(m){
-			var li = Math.ceil(((q_max-q_min)*(t/100)+q_min).toFixed(2));
-			var d = cur.parentNode.index; //当前指针;
-			q[d]=t;	//实时值;
-			
-			if(li<=q_max&&li>=q_min){
-				//q.splice(d,0,Math.ceil(((q_max-q_min)*(t/100)+q_min).toFixed(2)));
-				Rn[d]=cur.nextSibling.textContent;
-				//---------------------------不受约束;--------------------------------------------
-				//cur.nextSibling.textContent = Math.ceil(((q_max-q_min)*(t/100)+q_min).toFixed(2));
-				//cur.parentNode.style.left=z+'px';
-				//la[d].style.width = q[d]+'%';
-				//---------------------------不受约束;--------------------------------------------
-				//数值不能小于相邻左边的，不能大于相邻右边的(受约束);
-				//第一个;
-				if(!cur.parentNode.previousSibling){
-					if(li>Rn[d+1]){
-						console.log("不可移动，数值不能比右边的值还大!");
-					}else{
-						cur.parentNode.style.left=z+'px';
-						cur.nextSibling.textContent = Math.ceil(((q_max-q_min)*(t/100)+q_min).toFixed(2));
-						la[d].style.width = q[d]+'%';
-					};
-				//最后一个;
-				}else if(cur.parentNode.nextSibling.nodeName=='P'){
-					if(li<Rn[d-1]){
-						console.log("不可移动，数值不能比左边的值还大!");
-					}else{
-						cur.parentNode.style.left=z+'px';
-						cur.nextSibling.textContent = Math.ceil(((q_max-q_min)*(t/100)+q_min).toFixed(2));
-						la[d].style.width = q[d]+'%';
-					}	
-				//中间;
-				}else{
-					if(li<=Rn[d+1]&&li>=Rn[d-1]){
-						cur.parentNode.style.left=z+'px';
-						cur.nextSibling.textContent = Math.ceil(((q_max-q_min)*(t/100)+q_min).toFixed(2));
-						la[d].style.width = q[d]+'%';
-					}else{
-						console.log(li+"不可移动，数值超出可选范围，请调节其他两个选项扩大范围!");
-					}
-				};
-			}else{
-				console.log('超过规定值!');
-			};
-			//console.log(Rn);
-		}	
-		/*********************算法有缺陷********************************
-		if((m && z>=0) && (m&&z<=h)){
-			
+		/*
+		var es = cur.parentNode.parentNode.querySelectorAll("div");
+		console.log(es.length);
+		var qq=[];
+		for(var u=0;u<es.length;u++){
+			var tts = es[u].querySelector('span').textContent;
+			qq.push(tts);
+		}
+		*/
+		
+		if(m && z>=0 && z<=h){
+			var d = cur.parentNode.index;
 			q[d]=t;	//实时值;
 			if(q[d]<q[d-1]){
 				q[d]=q[d-1];
@@ -240,28 +198,15 @@ conBar.prototype.startEven = function(p){
 					//la[uk].style.borderColor = ;
 					la[uk].style.zIndex = le;
 					la[uk].style.width =  q[uk]+'%';
-							//Math.ceil(((q[uk]-q_min)/(q_max-q_min)).toFixed(2)*100)+'%';
-							//console.log(q[d]+":"+q);
-							//Math.ceil(((options.items[s][1]-options.valueFrom)/(options.valueTo-options.valueFrom)).toFixed(2)*100)+'%'
-							//q[uk]+'%';
+											//Math.ceil(((q[uk]-q_min)/(q_max-q_min)).toFixed(2)*100)+'%';
+					//console.log(q[d]+":"+q);
+										//Math.ceil(((options.items[s][1]-options.valueFrom)/(options.valueTo-options.valueFrom)).toFixed(2)*100)+'%'
+										//q[uk]+'%';
 					le--;
 				};		
 			}
 		};
-		***********/
 			
-	}
-	function endEven(e){
-		e = event || window.event;
-		var cur = this;
-		var spanValue = cur.parentNode.parentNode.querySelectorAll("span");
-		var values = new Array();
-		
-		spanValue.forEach(function(v,i,a){
-			values.push(v.textContent);
-		});
-		console.log(Rn);
-		console.log(values);
 	}
 }
 </script>
@@ -271,11 +216,11 @@ conBar.prototype.startEven = function(p){
 //调用方法;
 var cc = new conBar({
 		boxClass:".cBc", //ID 跟 Class名称均可;
-		items:[["#1afbb6",15,"images/ys-hbxjt.png"],["#000000",40,"images/ys-hbxjt.png"],["#ff0000",79,"images/ys-hbxjt.png"]],//控件个数[颜色，默认数值，控件图库位置];
-		valueFrom:0,	//起点；
-		valueTo:100,	//终点;
+		items:[["#1afbb6",65,"images/ys-hbxjt.png"],["#000000",70,"images/ys-hbxjt.png"],["#ff0000",99,"images/ys-hbxjt.png"]],//控件个数[颜色，默认数值，控件图库位置];
+		valueFrom:40,	//起点；
+		valueTo:130,	//终点;
 		swipeAble:true	//是否可以拉动;
-});
+}); 
 </script>
 </body> 
 </html>
