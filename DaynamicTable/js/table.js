@@ -42,7 +42,6 @@ function tableClick(a,b,c,d){//参数：a->子级项目个数，b->子集列表�
 	for(var j=0;j<b.length;j++){
 		p.push(document.createElement("td"));
 		p[j].innerHTML = "3.23";
-		//m.rows[2].appendChild(p[j]);
 		m.rows[2].insertBefore(p[j],m.rows[2].cells[3].nextSibling);	
 	}
 		m.rows[2].removeChild(m.rows[2].cells[3]);
@@ -50,7 +49,9 @@ function tableClick(a,b,c,d){//参数：a->子级项目个数，b->子集列表�
 		x=1;
 		t.colSpan = 0;
 		tb.removeChild(m.rows[cur+1]);
-		//	m.removeChild(m.rows[1]);
+		for(var i=3;i<13;i++){
+		tb.rows[1].removeChild(tb.rows[1].cells[3]);
+		}
 	}
 	}else{	//不可点击;
 		for(var i=0;i<arguments.length;i++){
