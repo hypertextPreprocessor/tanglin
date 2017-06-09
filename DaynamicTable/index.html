@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>动态表格单元数据</title>
+<meta http-equiv="content-type" content="text/html;charset=utf8"/>
+<link type="text/css" rel="stylesheet" href="css/table.css"/>
+<script type="text/javascript" src="js/table.js"></script>
+</head>
+<body>
+	<div>
+		<table class="table">
+			<caption>求和项：金额</caption>
+			<tr>
+				<th><button onclick="tableClick(false)">地区</button></th>
+				<th><button>销售金额（含税)</button></th>
+				<th><button>实收金额（含税）</button></th>
+				<th><button onclick="tableClick(11,['不可预见费用','财务费用','工程款','固定资产/无形资产/低值易耗品','管理费用','还贷款','其他支出','税金','土地支出','销售费用','足球净收支'],true,this)">支出金额</button></th>
+				<th><button>收入差额</button></th>
+			</tr>
+			<tr>
+				<td>佛山</td>
+				<td>129010077</td>
+				<td>29150299</td>
+				<td>57076568.98</td>
+				<td>612015</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

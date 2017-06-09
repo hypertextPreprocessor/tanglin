@@ -1,0 +1,21 @@
+function spn(str,n){
+	if(typeof(str)!=="string") throw "type Error";
+	for(i=0;;i++){
+		n=n.parentNode;
+		if(n.nodeName==str)break;
+	}
+	return n;
+};
+function tableClick(a,b,c,d){//参数：a->子级项目个数，b->子集列表标题（数组），c->可否点击,d->当前对象;
+	var s = d;
+	var m = spn("TABLE",s);
+	var tdStr;
+	m.insertRow(1);
+	for(var i=0;i<a;i++){
+		tdStr+="<td></td>";
+	}
+	m.rows[1].innerHTML=tdStr;
+	for(var i =0;i<m.rows[1].cells.length;i++){
+		m.rows[1].cells[i].innerHTML = "xx";
+	}
+}
