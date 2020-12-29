@@ -1,17 +1,18 @@
 # 项目名称 - xxxx项目
 ## 全局声明
-- 主域名: https://example.com
-- 请求地址: /api
-- 媒体资源地址: /static/resource/
-- sql地址:  /usr/local/sql
+- 主域名: `https://example.com`
+- cdn: `https://qiniu.icloud.com/example/`
+- 请求地址: `/api`
+- 媒体资源地址: `/static/resource/`
+- sql地址:  `/usr/local/sql`
 - 请求头规范:   
-- Content-Type: application/json
-- 响应状态吗:
+- `Content-Type: application/json`
+- 响应状态吗:  
 |状态码|说明|
 |---|---|
 |500|服务器内部错误|
 |200|OK|
-|404|not found|
+|404|not found|  
 ## 安装方法/使用说明
 ### 前端   
 解压文件之后执行.  
@@ -31,9 +32,9 @@
 ## api文档
 ### 1. 登录接口
 ---
-- ####  请求地址 /sys/login.do
-- #### 请求方式 POST
-- ####  页面位置 com/headway/controller/weixin/LoginIndex.java
+- ####  请求地址 `/sys/login.do`
+- #### 请求方式 `POST`
+- ####  页面位置 `com/headway/controller/weixin/LoginIndex.java`
 - ####  请求参数
 |名称|是否必填|数据类型|说明|
 |---|---|---|---|
