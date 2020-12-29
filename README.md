@@ -21,3 +21,6 @@
     图片上传控件
 - rate
     点赞控件
+### 8. documentations
+    开发文档规范
+  - README.md 
