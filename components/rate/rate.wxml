@@ -1,0 +1,14 @@
+<view class="rate">
+    <view class="r1"><slot></slot></view>
+    <view class="r2"> 
+        <block wx:for="{{steps}}" wx:key="unique">
+            <image class="rrimg" 
+                style="width:{{rateIcon.size}}rpx;height:{{rateIcon.size}}rpx;" 
+                src="{{setpList[index]}}" 
+                data-tap-idx="{{index}}"
+                bindtap="stepTap"
+                mode="aspectFit">
+            </image>
+        </block>
+    </view>
+</view>

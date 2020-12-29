@@ -1,0 +1,25 @@
+
+<block wx:if="{{gallery.length}}">
+    <view class="item" wx:for="{{gallery}}" wx:for-index="index" wx:for-item="item" wx:key="unique">
+        <image bindtap="preview" class="itemimg" src="{{item}}" mode="widthFix" data-del-index="{{index}}"></image>
+        <block wx:if="{{delBtn}}">
+            <button class="cu-btn icon bg-red itembtn" bindtap="delPic" data-del-index="{{index}}">
+                <text class="cuIcon-delete"></text>
+            </button>
+        </block>
+    </view>
+</block>
+<block wx:elif="{{plHder}}">
+    <view class="cu-card case no-card">
+        <view class="cu-item shadow">
+            <view class="text-center padding"><text>暂无资源</text></view>
+        </view>
+    </view>
+</block>
+<!--在组件外使用
+<view class="cu-item">
+    <button class="cu-btn block line-mauve lg" bindtap="chooseMedia">
+        <text class="cuIcon-upload"></text>添加图纸
+    </button>
+</view>
+-->

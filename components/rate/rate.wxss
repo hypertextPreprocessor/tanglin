@@ -1,0 +1,11 @@
+.rate{
+    display:flex;flex-flow:row no-wrap;
+    padding:12rpx 22rpx;
+    background: #ffffff;
+}
+.r1{flex-basis:30%;}
+.r2{flex-basis:70%;}
+.rrimg{
+    vertical-align:middle;
+    margin:0 8rpx;
+}
