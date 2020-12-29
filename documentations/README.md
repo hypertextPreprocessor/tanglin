@@ -35,7 +35,11 @@
    - #### 请求方式 POST
    - ####  页面位置 com/headway/controller/weixin/LoginIndex.java
    - ####  请求参数
-  
+  ---
+|S|s|s|
+|---|---|---|
+|w|w|w|
+  ---
     |名称|是否必填|数据类型|说明|
     |---|---|---|---|
     |code|是|string|登录code|
