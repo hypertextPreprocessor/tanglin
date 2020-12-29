@@ -36,9 +36,9 @@
    - ####  页面位置 com/headway/controller/weixin/LoginIndex.java
    - ####  请求参数
 ---
-    |名称|是否必填|数据类型|说明|
-    |---|---|---|---|
-    |code|是|string|登录code|
+|名称|是否必填|数据类型|说明|
+|---|---|---|---|
+|code|是|string|登录code|
 ---
    - #### 返回参数
     |名称|类型|默认值|说明|
